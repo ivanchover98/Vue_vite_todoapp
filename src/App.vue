@@ -59,7 +59,12 @@ function changePrio(index){
 </script>
 
 <template>
+  <header>
+    <router-link to="/new">New Task</router-link>
+    <router-link to="/list">List Tasks</router-link></header>
+  <router-link to="/welcome">Welcome</router-link>
   <main class="container">
+    <router-view/>
     <h1>To-do App</h1>
     <New @submitTask="addTask"/>
     <List :tasks="task" @deleteTask="deleteTask" @changeStatus="changeStatus" @deleteAllFinished="deleteAllFinished" @changePrio="changePrio"/>
