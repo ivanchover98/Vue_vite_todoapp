@@ -30,7 +30,8 @@
 </script>
 
 <template>
-  <h3>Create a task</h3>
+  <h3 class="d-sm-none d-lg-inline d-xl-inline d-md-none">Create a task</h3>
+  <br>
   <label for="name">Task Name:</label>
   <input v-model="name" type="text" placeholder="Enter a task" class="form-control">
   <label for="prior">Priority</label>

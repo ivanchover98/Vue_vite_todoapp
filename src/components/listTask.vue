@@ -117,7 +117,7 @@ function timePastCreation(date){
 </script>
 <template>
 
-  <h3>List Task</h3>
+  <h3 class="d-sm-none d-lg-inline d-xl-inline d-md-none">List Task</h3>
   <div class="my-2 mt-4">
     <p>Status Filter</p>
     <select id="filterStatus" class="form-select" v-model="finishedShow">

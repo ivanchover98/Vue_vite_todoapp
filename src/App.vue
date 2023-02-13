@@ -58,6 +58,7 @@ import { ref, onMounted, computed } from "vue";
 </script>
 
 <template>
+  <div>
   <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark fixed-top">
     <div class="container-fluid">
       <router-link to="/welcome"><a class="navbar-brand text-white">Welcome</a></router-link>
@@ -76,6 +77,7 @@ import { ref, onMounted, computed } from "vue";
       </div>
     </div>
   </nav>
+  </div>
   <main class="container">
     <router-view/>
   </main>
