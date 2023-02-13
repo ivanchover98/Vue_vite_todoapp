@@ -1,24 +1,81 @@
 <script setup>
-import {ref, computed} from 'vue';
+import {ref, computed, onMounted} from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import New from './newTask.vue'
+
+//Variables App.vue
+let tasks = ref([]);
+let priorities = ['high', 'medium', 'low'];
 
 
-const props = defineProps(['tasks'])
+
+
+// const props = defineProps(['tasks'])
 let finishedStatues = ['Not finished', 'Finished', 'All']
 let finishedShow = ref('');
 let taskName = ref('');
-const emit = defineEmits(["deleteTask", "changeStatus", "deleteAllFinished", "changePrio"])
-function deleteTask(id){
-  emit("deleteTask", id)
+
+
+
+onMounted(()=>{
+  if(localStorage.tasks)
+    tasks.value = JSON.parse(localStorage.tasks)
+})
+//FUNCIONES EMIT
+// const emit = defineEmits(["deleteTask", "changeStatus", "deleteAllFinished", "changePrio"])
+// function deleteTask(id){
+//   emit("deleteTask", id)
+// }
+
+// function changeStatus(id){
+//   emit("changeStatus", id)
+// }
+
+// function changePrio(id){
+//   emit('changePrio', id)
+// }
+
+// function deleteAllFinished(){
+//   emit('deleteAllFinished')
+// }
+
+//FUNCIONES DE APP.VUE
+
+function localStorageReload(){
+  localStorage.tasks=JSON.stringify(tasks.value)
 }
 
-function changeStatus(id){
-  emit("changeStatus", id)
+function deleteTask(index){
+  tasks.value.splice(index,1)
+  localStorageReload();
 }
+function changeStatus(index){
+  if(tasks.value[index].finished === "Not finished"){
+    tasks.value[index].finished = "Finished"
+  }
+  else{
+    tasks.value[index].finished = "Not finished"
+
+  }
+  localStorageReload();
+}
+function deleteAllFinished(){
+  tasks.value = tasks.value.filter((item)=>{
+    return item.finished !== 'Finished';
+  })
+  localStorageReload()
+}
+function changePrio(index){
+  let newObj = priorities.indexOf(tasks.value[index].priority);
+  if(++newObj > 2) newObj= 0;
+  tasks.value[index].priority = priorities[newObj];
+  localStorageReload()
+}
+/////////////////////////////////////////////////////////////
 
 const filter = computed(() => {
-  if (props.tasks===[]) return
-  let filter = props.tasks;
+  if (tasks.value===[]) return
+  let filter = tasks.value;
   if (finishedShow.value === "Finished") {
     filter = filter.filter(task => task.finished === "Finished");
     console.log(filter.length)
@@ -26,7 +83,6 @@ const filter = computed(() => {
     filter = filter.filter(task => task.finished === "Not finished");
     console.log(filter.length)
   }
-  //También se encarga de filtrar por el input de busqueda.
   if(taskName.value){
     filter= filter.filter(task => task.name.toLowerCase().includes(taskName.value.toLowerCase()));
   }
@@ -46,18 +102,10 @@ const filter = computed(() => {
   return filter;
 });
 
-function deleteAllFinished(){
-  emit('deleteAllFinished')
-}
-
 const countFinishedTasks = computed(()=>{
-  if (props.tasks===[]) return
-  return props.tasks.filter(task => task.finished === 'Finished').length;
+  if (tasks.value===[]) return
+  return tasks.value.filter(task => task.finished === 'Finished').length;
 })
-
-function changePrio(id){
-  emit('changePrio', id)
-}
 
 function timePastCreation(date){
   const currentTime = new Date().getTime();
@@ -68,8 +116,8 @@ function timePastCreation(date){
 
 </script>
 <template>
-  <button class="btn btn-danger" @click="deleteAllFinished">Delete All Finished</button>
-  <h3>Filters</h3>
+
+  <h3>List Task</h3>
   <div class="my-2 mt-4">
     <p>Status Filter</p>
     <select id="filterStatus" class="form-select" v-model="finishedShow">
@@ -113,7 +161,8 @@ function timePastCreation(date){
         </tbody>
       </table>
     </div>
-  <footer class="sticky-xl-bottom d-flex justify-content-around p-4 bg-danger mt-3">
+  <button class="btn btn-danger" @click="deleteAllFinished">Delete All Finished</button>
+  <footer class="sticky-xl-bottom d-flex justify-content-around p-4 bg-primary mt-3">
     <span class="text-white">Contador de tareas: {{ tasks.length }}</span>
     <span class="text-white">Contador de tareas finalizadas: {{ countFinishedTasks }}</span>
   </footer>

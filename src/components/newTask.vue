@@ -1,20 +1,36 @@
-<script setup>
-  import {ref} from 'vue';
 
+
+<script setup>
+  import {ref, onMounted} from 'vue';
+  let task = ref([]);
   let priorities = ['high', 'medium', 'low'];
   let priority = ref("");
   let name = ref("");
 
-  const emit = defineEmits(["submitTask"]);
-  function submitTask(){
-    emit("submitTask", name, priority)
-    name.value = "";
-    priority.value = "";
+  const props = defineProps(['task'])
+  // const emit = defineEmits(["submitTask"]);
+
+  onMounted(()=>{
+    if(localStorage.tasks)
+      task.value = JSON.parse(localStorage.tasks)
+  })
+
+  function addTask(name, priority){
+    task.value.push({
+      name: name,
+      time: new Date(),
+      finished:"Not finished",
+      priority: priority
+    })
+    localStorageReload();
+  }
+  function localStorageReload(){
+    localStorage.tasks=JSON.stringify(task.value)
   }
 </script>
 
 <template>
-  <h3>Create task</h3>
+  <h3>Create a task</h3>
   <label for="name">Task Name:</label>
   <input v-model="name" type="text" placeholder="Enter a task" class="form-control">
   <label for="prior">Priority</label>
@@ -23,5 +39,5 @@
       {{ priority }}
     </option>
   </select>
-  <button @click="submitTask" class="btn btn-warning rounded-0 mx-1 my-2">Submit</button>
+  <button @click="addTask(name, priority)" class="btn btn-warning rounded-0 mx-1 my-2">Submit</button>
 </template>

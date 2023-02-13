@@ -7,6 +7,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import List from './components/listTask.vue'
 import New from './components/newTask.vue'
 import Welcome from './components/welcomeTask.vue'
+import NotFound from "./components/notFound.vue";
 
 const routes = [
     {
@@ -18,6 +19,10 @@ const routes = [
     },{
         path: '/welcome',
         component: Welcome
+    },{
+        path: '/:pathmatch(.*)',
+        name: "Not found",
+        component: NotFound
     }
 ]
 
