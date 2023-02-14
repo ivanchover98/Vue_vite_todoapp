@@ -21,25 +21,6 @@ onMounted(()=>{
   if(localStorage.tasks)
     tasks.value = JSON.parse(localStorage.tasks)
 })
-//FUNCIONES EMIT
-// const emit = defineEmits(["deleteTask", "changeStatus", "deleteAllFinished", "changePrio"])
-// function deleteTask(id){
-//   emit("deleteTask", id)
-// }
-
-// function changeStatus(id){
-//   emit("changeStatus", id)
-// }
-
-// function changePrio(id){
-//   emit('changePrio', id)
-// }
-
-// function deleteAllFinished(){
-//   emit('deleteAllFinished')
-// }
-
-//FUNCIONES DE APP.VUE
 
 function localStorageReload(){
   localStorage.tasks=JSON.stringify(tasks.value)
@@ -71,7 +52,7 @@ function changePrio(index){
   tasks.value[index].priority = priorities[newObj];
   localStorageReload()
 }
-/////////////////////////////////////////////////////////////
+
 
 const filter = computed(() => {
   if (tasks.value===[]) return
